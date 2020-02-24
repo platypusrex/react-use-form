@@ -1,5 +1,5 @@
 {
-  "name": "react-use-form",
+  "name": "@platypusrex/react-use-form",
   "author": "Frank Cooke",
   "description": "A react form hook with yup integration and debounce validation functionality",
   "keywords": [
