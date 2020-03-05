@@ -12,13 +12,13 @@ import {
   SetFormValues,
 } from '../types';
 
-interface UseFormConfig<TValues extends FormValue> {
+export interface UseFormConfig<TValues extends FormValue> {
   initialValues: TValues;
   validationSchema?: ObjectSchema<TValues>;
   debounce?: DebounceValidation;
 }
 
-interface UseForm<TValues extends FormValue> {
+export interface UseForm<TValues extends FormValue> {
   values: TValues;
   errors: Partial<TValues>;
   isValid: boolean;

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { FormValue, SetValues } from '../types';
 
-interface UseValues<TValues> {
+export interface UseValues<TValues> {
   values: TValues;
   setValues: SetValues<TValues>;
   handleOnChange: (name: string, value: any) => void;

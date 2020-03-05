@@ -13,11 +13,11 @@ import {
   validateField,
 } from '../utils';
 
-type UseValidation<TValues> = {
+export interface UseValidation<TValues> {
   errors: Partial<TValues>;
   handleFieldValidation: (name: string, value: any) => void;
   resetErrors: () => void;
-};
+}
 
 export const useValidation = <TValues extends FormValue>(
   validationSchema?: ObjectSchema<TValues>,
