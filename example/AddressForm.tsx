@@ -9,7 +9,7 @@ import { stateOptions } from './stateOptions';
 import './index.css';
 
 const pobox = new RegExp('^((P(ost|ostal)?([ \\.]*O(ffice)?)?([ \\.]*Box)?)*$)', 'i');
-const alpha = new RegExp(/^[a-zA-Z0-9\s]*$/, 'i');
+const alpha = new RegExp('[!@#$%^&*()<>:;"\'{}[\\]|+=?/\\\\_]', 'g');
 
 const validationSchema = Yup.object().shape({
   address1: Yup
@@ -50,8 +50,6 @@ export const AddressForm: React.FC = () => {
       out: 0,
     },
   });
-
-  console.log(errors?.state);
 
   const handleSubmit = () => {
     console.log('values', values);
@@ -115,8 +113,6 @@ export const AddressForm: React.FC = () => {
       </form>
       <div className="button-wrapper margin-top space-around">
         <button onClick={() => setValue('city', 'Charleston')}>set city</button>
-        {/*<button onClick={() => setValue('email', 'ur@email.com')}>set email</button>*/}
-        {/*<button onClick={() => setValue('password', 'ursafepassword')}>set password</button>*/}
       </div>
     </>
   );
