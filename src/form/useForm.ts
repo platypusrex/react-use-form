@@ -23,7 +23,7 @@ export interface UseForm<TValues extends FormValue> {
   errors: Partial<TValues>;
   isValid: boolean;
   onChange: (e: OnChangeEvent) => void;
-  onSubmit: (cb: () => void) => (e: FormEvent) => void;
+  onSubmit: (cb: (values: TValues) => void) => (e: FormEvent) => void;
   reset: () => void;
   setValues: SetFormValues<TValues>;
   setValue: SetFormValue<TValues>;
@@ -90,11 +90,11 @@ export const useForm = <TValues extends FormValue>({
     }
   };
 
-  const onSubmit = (cb: () => void) => (e: FormEvent) => {
+  const onSubmit = (cb: (values: TValues) => void) => (e: FormEvent) => {
     if (e) {
       e.preventDefault();
     }
-    cb();
+    cb(values);
   };
 
   return {
