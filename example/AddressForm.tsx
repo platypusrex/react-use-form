@@ -8,8 +8,8 @@ import { useForm } from '../.';
 import { stateOptions } from './stateOptions';
 import './index.css';
 
-const pobox = new RegExp('^((P(ost|ostal)?([ \\.]*O(ffice)?)?([ \\.]*Box)?)*$)', 'i');
-const alpha = new RegExp('[!@#$%^&*()<>:;"\'{}[\\]|+=?/\\\\_]', 'g');
+const pobox = /\bP(ost|ostal)?([ \.]*(O|0)(ffice)?)?([ \.]*Box)\b/i;
+const alpha = /^[^!@#$%^&*()<>:;"'{}[\]|+=?/\\_]*$/;
 
 const validationSchema = Yup.object().shape({
   address1: Yup
@@ -51,8 +51,8 @@ export const AddressForm: React.FC = () => {
     },
   });
 
-  const handleSubmit = () => {
-    console.log('values', values);
+  const handleSubmit = (formValues) => {
+    console.log('values', formValues);
   };
 
   return (
