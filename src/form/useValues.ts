@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { FormValue, SetValues } from '../types';
 
 export interface UseValues<TValues> {
@@ -13,16 +13,16 @@ export const useValues = <TValues extends FormValue>(
 ): UseValues<TValues> => {
   const [values, setValues] = useState<TValues>(initialValues);
 
-  const resetValues = (initialValues: TValues) => {
+  const resetValues = useCallback((initialValues: TValues) => {
     setValues(initialValues);
-  };
+  }, []);
 
-  const handleOnChange = (name: string, value: any) => {
+  const handleOnChange = useCallback((name: string, value: any) => {
     setValues(prevState => ({
       ...prevState,
       [name]: value,
     }));
-  };
+  }, []);
 
   return { values, setValues, resetValues, handleOnChange };
 };
