@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { ObjectSchema } from 'yup';
 import {
   DebounceState,
@@ -41,22 +41,25 @@ export const useValidation = <TValues extends FormValue>(
     initialDebounceState
   );
 
-  const resetErrors = () => {
+  const resetErrors = useCallback(() => {
     setErrors(getInitialValidationState(validationSchema));
-  };
+  }, [validationSchema]);
 
-  const handleFieldValidation = (name: string, value: any) => {
-    if (Reflect.has(initialValidationState, name)) {
-      validateField<TValues>({
-        validationSchema,
-        name,
-        value,
-        errors,
-        setErrors,
-        debouncers: debouncersRef.current,
-      });
-    }
-  };
+  const handleFieldValidation = useCallback(
+    (name: string, value: any) => {
+      if (Reflect.has(initialValidationState, name)) {
+        validateField<TValues>({
+          validationSchema,
+          name,
+          value,
+          errors,
+          setErrors,
+          debouncers: debouncersRef.current,
+        });
+      }
+    },
+    [errors, debouncersRef.current, initialValidationState, validationSchema]
+  );
 
   return { errors, resetErrors, handleFieldValidation };
 };

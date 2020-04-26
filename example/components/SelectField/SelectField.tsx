@@ -2,7 +2,6 @@ import * as React from 'react';
 import { ChangeEvent } from 'react';
 import { FormField } from '../FormField/FormField';
 import './SelectField.css';
-import { stateOptions } from '../../stateOptions';
 
 interface SelectFieldProps {
   id: string;
@@ -17,27 +16,29 @@ interface SelectFieldProps {
   onChange: (e: ChangeEvent<HTMLSelectElement>) => void;
 }
 
-export const SelectField: React.FC<SelectFieldProps> = ({
-  id,
-  name,
-  value,
-  options,
-  label,
-  error,
-  onChange,
-}) => (
-  <FormField id={id} label={label} error={error}>
-    <select
-      value={value}
-      className={`select ${error ? 'error' : ''}`}
-      name="state"
-      id="state-input"
-      onChange={onChange}
-    >
-      <option value=""> -- select an option -- </option>
-      {options.map(option => (
-        <option key={option.name} value={option.value}>{option.name}</option>
-      ))}
-    </select>
-  </FormField>
+export const SelectField = React.memo<SelectFieldProps>(
+    ({
+    id,
+    name,
+    value,
+    options,
+    label,
+    error,
+    onChange,
+  }) => (
+    <FormField id={id} label={label} error={error}>
+      <select
+        value={value}
+        className={`select ${error ? 'error' : ''}`}
+        name={name}
+        id="state-input"
+        onChange={onChange}
+      >
+        <option value=""> -- select an option -- </option>
+        {options.map(option => (
+          <option key={option.name} value={option.value}>{option.name}</option>
+        ))}
+      </select>
+    </FormField>
+  )
 );

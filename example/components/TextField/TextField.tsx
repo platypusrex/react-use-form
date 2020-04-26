@@ -13,15 +13,16 @@ interface TextFieldProps {
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
-export const TextField: React.FC<TextFieldProps> = ({
-  id,
-  name,
-  value,
-  type,
-  label,
-  error,
-  onChange,
-}) => (
+export const TextField = React.memo<TextFieldProps>(
+    ({
+    id,
+    name,
+    value,
+    type,
+    label,
+    error,
+    onChange,
+  }) =>  (
   <FormField id={id} label={label} error={error}>
     <input
       className={`text-input ${error ? 'error' : ''}`}
@@ -32,4 +33,5 @@ export const TextField: React.FC<TextFieldProps> = ({
       onChange={onChange}
     />
   </FormField>
+  )
 );

@@ -89,7 +89,7 @@ export const UserForm: React.FC = () => {
       <div className="button-wrapper margin-top space-around">
         <button onClick={() => setValue('username', 'urname')}>set name</button>
         <button onClick={() => setValue('email', 'ur@email.com')}>set email</button>
-        <button onClick={() => setValue('password', 'ursafepassword')}>set password</button>
+        <button onClick={() => setValue('password', 'urpassword')}>set password</button>
       </div>
     </>
   );
