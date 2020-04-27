@@ -58,7 +58,7 @@ export const useValidation = <TValues extends FormValue>(
         });
       }
     },
-    [errors, debouncersRef.current, initialValidationState, validationSchema]
+    [errors, initialValidationState, validationSchema]
   );
 
   return { errors, resetErrors, handleFieldValidation };
