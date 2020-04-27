@@ -32,7 +32,9 @@ export const validateField = <TValues extends FormValue>({
       [fieldName]: value,
     })
     .then(() => {
-      debounceOut(name, undefined, setErrors);
+      if (errors[fieldName]) {
+        debounceOut(name, undefined, setErrors);
+      }
 
       if (debounceIn.cancel) {
         debounceIn.cancel();

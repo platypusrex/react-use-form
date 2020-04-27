@@ -1,13 +1,13 @@
-import { FormEvent, useCallback, /*useEffect*/ useState } from 'react';
+import { FormEvent, useCallback, useMemo } from 'react';
 import { ObjectSchema } from 'yup';
 import { useValues } from './useValues';
 import { useValidation } from './useValidation';
+import { DEBOUNCE_WARNING } from '../constants';
 import {
   getInputNameAndValue,
   handleSetFormValues,
-  useIsomorphicLayoutEffect,
+  useEventCallback,
 } from '../utils';
-import { DEBOUNCE_WARNING } from '../constants';
 import {
   DebounceValidation,
   FormValue,
@@ -38,7 +38,6 @@ export const useForm = <TValues extends FormValue>({
   validationSchema,
   debounce,
 }: UseFormConfig<TValues>): UseForm<TValues> => {
-  const [isValid, setIsValid] = useState(false);
   const {
     values,
     setValues: handleSetValues,
@@ -54,19 +53,10 @@ export const useForm = <TValues extends FormValue>({
     console.warn(DEBOUNCE_WARNING);
   }
 
-  useIsomorphicLayoutEffect(() => {
-    let isMounted = false;
-    if (!validationSchema) {
-      !isMounted && setIsValid(true);
-    } else {
-      const currentValidState = validationSchema.isValidSync(values);
-      currentValidState !== isValid && setIsValid(currentValidState);
-    }
-
-    return () => {
-      isMounted = true;
-    };
-  }, [validationSchema, values]);
+  const isValid = useMemo(
+    () => (validationSchema ? validationSchema.isValidSync(values) : true),
+    [validationSchema, values]
+  );
 
   const setValues = useCallback(
     (formValues: Partial<TValues>, shouldValidate = !!validationSchema) =>
@@ -76,7 +66,7 @@ export const useForm = <TValues extends FormValue>({
         validateField: handleFieldValidation,
         shouldValidate,
       }),
-    []
+    [handleFieldValidation, handleSetValues, validationSchema]
   );
 
   const setValue = useCallback(
@@ -87,22 +77,22 @@ export const useForm = <TValues extends FormValue>({
         validateField: handleFieldValidation,
         shouldValidate,
       }),
-    []
+    [handleFieldValidation, handleSetValues, validationSchema]
   );
 
   const reset = useCallback(() => {
     resetValues(initialValues);
     resetErrors();
-  }, [initialValues]);
+  }, [initialValues, resetErrors, resetValues]);
 
-  const onChange = useCallback((e: OnChangeEvent) => {
+  const onChange = useEventCallback((e: OnChangeEvent) => {
     const { name, value } = getInputNameAndValue(e);
     handleOnChange(name, value);
 
     if (validationSchema) {
       handleFieldValidation(name, value);
     }
-  }, []);
+  });
 
   const onSubmit = useCallback(
     (cb: (values: TValues) => void) => (e: FormEvent) => {

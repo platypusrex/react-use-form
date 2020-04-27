@@ -22,16 +22,16 @@ export const TextField = React.memo<TextFieldProps>(
     label,
     error,
     onChange,
-  }) =>  (
-  <FormField id={id} label={label} error={error}>
-    <input
-      className={`text-input ${error ? 'error' : ''}`}
-      id={id}
-      type={type}
-      name={name}
-      value={value}
-      onChange={onChange}
-    />
-  </FormField>
+  }) => (
+    <FormField id={id} label={label} error={error}>
+      <input
+        className={`text-input ${error ? 'error' : ''}`}
+        id={id}
+        type={type}
+        name={name}
+        value={value}
+        onChange={onChange}
+      />
+    </FormField>
   )
 );
