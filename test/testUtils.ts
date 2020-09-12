@@ -1,9 +1,12 @@
 import * as yup from 'yup';
 
-export const validationSchema = yup.object().shape({
-  firstName: yup.string(),
-  lastName: yup.string().required(),
-});
+export const validationSchema = yup
+  .object()
+  .shape({
+    firstName: yup.string(),
+    lastName: yup.string().required(),
+  })
+  .defined();
 
 export const formValues: yup.InferType<typeof validationSchema> = {
   firstName: 'foo',
