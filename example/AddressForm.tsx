@@ -15,13 +15,13 @@ const validationSchema = Yup.object().shape({
   address1: Yup
     .string()
     .required()
-    .test('no-po-box', 'P.O. box is not allowed', (value) => !pobox.test(value))
-    .test('no-alphanumeric', 'No alphanumeric characters allowed', value => alpha.test(value)),
+    .test('no-po-box', 'P.O. box is not allowed', (value) => !pobox.test(value!))
+    .test('no-alphanumeric', 'No alphanumeric characters allowed', value => alpha.test(value!)),
   address2: Yup.string(),
   city: Yup.string().required(),
   state: Yup.string().required(),
   zip: Yup.string().required().min(5).max(5),
-});
+}).defined();
 
 type FormValues = Yup.InferType<typeof validationSchema>;
 

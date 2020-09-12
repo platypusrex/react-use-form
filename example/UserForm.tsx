@@ -11,7 +11,7 @@ const validationSchema = Yup.object().shape({
   username: Yup.string().required().min(4),
   email: Yup.string().required().email(),
   password: Yup.string().required('Password is required').min(10),
-});
+}).defined();
 
 type FormValues = Yup.InferType<typeof validationSchema>;
 
