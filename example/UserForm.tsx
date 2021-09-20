@@ -44,8 +44,8 @@ export const UserForm: React.FC = () => {
     setValues({ username: 'foo', email: 'bar', password: 'password' });
   }, []);
 
-  const handleSubmit = () => {
-    console.log('values', values);
+  const handleSubmit = (formValues) => {
+    console.log('formValues', formValues);
   };
 
   return (
