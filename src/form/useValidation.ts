@@ -40,7 +40,7 @@ export const useValidation = <TValues extends FormValue>(
 
   const debouncers = useMemo<DebounceState<TValues> | undefined>(
     () => initialDebounceState,
-    [validationSchema, initialDebounceState]
+    [initialDebounceState]
   );
 
   const resetErrors = useCallback(() => {
