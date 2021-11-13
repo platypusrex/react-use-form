@@ -35,12 +35,12 @@ export const useValidation = <TValues extends FormValue>(
   );
 
   const [errors, setErrors] = useState<Partial<TValues>>(
-    () => initialValidationState
+    initialValidationState
   );
 
   const debouncers = useMemo<DebounceState<TValues> | undefined>(
     () => initialDebounceState,
-    [initialDebounceState]
+    []
   );
 
   const resetErrors = useCallback(() => {
