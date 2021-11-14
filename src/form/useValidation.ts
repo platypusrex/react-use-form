@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ObjectSchema } from 'yup';
 import {
   DebounceState,
@@ -23,6 +23,7 @@ export const useValidation = <TValues extends FormValue>(
   validationSchema?: ObjectSchema<TValues>,
   debounce?: DebounceValidation
 ): UseValidation<TValues> => {
+  const schemaRef = useRef(validationSchema);
   const debounceTimers = useRef<DebounceValidationObj>(
     getDebounceTimers(debounce)
   );
@@ -38,10 +39,23 @@ export const useValidation = <TValues extends FormValue>(
     initialValidationState
   );
 
-  const debouncers = useMemo<DebounceState<TValues> | undefined>(
-    () => initialDebounceState,
-    []
+  const debouncers = useRef<DebounceState<TValues> | undefined>(
+    initialDebounceState
   );
+
+  useEffect(() => {
+    const fields = validationSchema ? Object.keys(validationSchema.fields) : [];
+    const fieldsRef = schemaRef.current
+      ? Object.keys(schemaRef.current.fields)
+      : [];
+    if (!fields.every((val, index) => val === fieldsRef[index])) {
+      debouncers.current = getInitialDebounceState(
+        debounceTimers.current,
+        validationSchema
+      );
+      schemaRef.current = validationSchema;
+    }
+  }, [validationSchema]);
 
   const resetErrors = useCallback(() => {
     setErrors(getInitialValidationState(validationSchema));
@@ -56,11 +70,11 @@ export const useValidation = <TValues extends FormValue>(
           value,
           errors,
           setErrors,
-          debouncers,
+          debouncers: debouncers.current,
         });
       }
     },
-    [errors, initialValidationState, validationSchema, debouncers]
+    [errors, initialValidationState, validationSchema]
   );
 
   return { errors, resetErrors, handleFieldValidation };
