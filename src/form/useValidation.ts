@@ -48,7 +48,7 @@ export const useValidation = <TValues extends FormValue>(
     const fieldsRef = schemaRef.current
       ? Object.keys(schemaRef.current.fields)
       : [];
-    if (!fields.every((val, index) => val === fieldsRef[index])) {
+    if (!fields.every((val, i) => val === fieldsRef[i])) {
       debouncers.current = getInitialDebounceState(
         debounceTimers.current,
         validationSchema
