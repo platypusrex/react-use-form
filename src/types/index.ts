@@ -16,8 +16,6 @@ export type InputChangeEvent = ChangeEvent<any>;
 
 export type OnChangeEvent = InputChangeEvent | NameAndValue;
 
-export type ValidationSchema<TSchema> = ObjectSchema<TSchema>;
-
 export type HandleValidateField<TValues extends FormValue> = (
   name: string,
   value: any,
@@ -39,13 +37,6 @@ export type SetFormValue<TValues extends FormValue> = (
   shouldValidate?: boolean
 ) => void;
 
-export interface DebounceValidationObj {
-  in: number;
-  out: number;
-}
-
-export type DebounceValidation = number | DebounceValidationObj;
-
 interface Cancelable {
   cancel(): void;
   flush(): void;
@@ -62,3 +53,17 @@ export type DebounceState<TValue> = {
     [key in keyof TValue]: any;
   };
 };
+
+export interface DebounceValidationObj {
+  in: number;
+  out: number;
+}
+
+export type DebounceValidation = number | DebounceValidationObj;
+
+export type ValidationSchema<TSchema> = ObjectSchema<TSchema>;
+
+export interface Validation<TValues extends FormValue> {
+  schema: ValidationSchema<TValues>;
+  debounce?: DebounceValidation;
+}
