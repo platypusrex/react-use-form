@@ -1,14 +1,19 @@
-import { ObjectSchema } from 'yup';
 import { Dispatch, SetStateAction } from 'react';
-import { DebounceState, FormValue } from '../types';
+import {
+  DebounceState,
+  FormError,
+  FormValue,
+  ValidationSchema,
+} from '../types';
+import { ValidationError } from 'yup';
 
-type ValidateFieldArgs<TValues> = {
-  validationSchema?: ObjectSchema;
+type ValidateFieldArgs<TValues extends FormValue> = {
+  validationSchema?: ValidationSchema<TValues>;
   debouncers?: DebounceState<TValues>;
   name: string;
   value: any;
-  errors: Partial<TValues>;
-  setErrors: Dispatch<SetStateAction<Partial<TValues>>>;
+  errors: FormError<TValues>;
+  setErrors: Dispatch<SetStateAction<FormError<TValues>>>;
 };
 
 export const validateField = <TValues extends FormValue>({
@@ -40,7 +45,7 @@ export const validateField = <TValues extends FormValue>({
         debounceIn.cancel();
       }
     })
-    .catch(err => {
+    .catch((err: ValidationError) => {
       if (errors[fieldName] !== err.message) {
         debounceIn(name, err.message, setErrors);
       }

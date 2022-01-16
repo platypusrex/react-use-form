@@ -1,12 +1,12 @@
-import { ObjectSchema } from 'yup';
-import { FormValue } from '../types';
+import { FormValue, ValidationSchema } from '../types';
 
 export const getInitialValidationState = <TValues extends FormValue>(
-  validationSchema?: ObjectSchema
-): Partial<TValues> => {
+  validationSchema?: ValidationSchema<TValues>
+): { [key in keyof TValues]: undefined } => {
   const fields = validationSchema?.describe().fields;
 
   if (!fields) {
+    // @ts-ignore
     return {};
   }
 

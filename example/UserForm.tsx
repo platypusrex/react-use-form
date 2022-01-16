@@ -1,19 +1,19 @@
 import 'react-app-polyfill/ie11';
 import * as React from 'react';
 import { useEffect } from 'react';
+import { object, string, InferType } from 'yup';
 import { TextField } from './components/TextField/TextField';
 import { Button } from './components/Button/Button';
-import * as Yup from 'yup';
 import { useForm } from '../.';
 import './index.css';
 
-const validationSchema = Yup.object().shape({
-  username: Yup.string().required().min(4),
-  email: Yup.string().required().email(),
-  password: Yup.string().required('Password is required').min(10),
-}).defined();
+const validationSchema = object({
+  username: string().required().min(4),
+  email: string().required().email(),
+  password: string().required('Password is required').min(10),
+});
 
-type FormValues = Yup.InferType<typeof validationSchema>;
+type FormValues = InferType<typeof validationSchema>;
 
 const initialValues: FormValues = {
   username: '',

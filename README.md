@@ -1,167 +1,241 @@
-# TSDX React User Guide
+# react-use-form
 
-Congrats! You just saved yourself hours of work by bootstrapping this project with TSDX. Let’s get you oriented with what’s here and how to use it.
+[![npm Package](https://img.shields.io/npm/v/@platypusrex/react-use-form.svg)](https://www.npmjs.org/package/@platypusrex/react-use-form)
+[![License](https://img.shields.io/npm/l/@platypusrex/react-use-form.svg)](https://github.com/platypusrex/react-use-form/blob/master/LICENSE)
 
-> This TSDX setup is meant for developing React components (not apps!) that can be published to NPM. If you’re looking to build an app, you should use `create-react-app`, `razzle`, `nextjs`, `gatsby`, or `react-static`.
+[comment]: <> ([![Coverage Status]&#40;https://coveralls.io/repos/github/platypusrex/next-merge-props/badge.svg?branch=chore/coveralls-github-action&#41;]&#40;https://coveralls.io/github/platypusrex/next-merge-props?branch=chore/coveralls-github-action&#41;)
 
-> If you’re new to TypeScript and React, checkout [this handy cheatsheet](https://github.com/sw-yx/react-typescript-cheatsheet/)
+[comment]: <> (![CI]&#40;https://github.com/platypusrex/react-use-form/workflows/CI/badge.svg&#41;)
 
-## Commands
+### Overview
+A simple and subtly powerful react hook for managing form state and validation with [Yup](https://github.com/jquense/yup).
+The motivation for creating yet another form hook lib was quite simple: personal use case. I needed a simple form hook that 
+could easily manage 95% of the simple forms I was typically with day-to-day. Also wanted to avoid hand rolling validation and 
+let a far more powerful library do the heavy lifting. I definitely wanted typescript support and solid autocompletion. 
+And due to a particular projects requirements I needed to have control over debouncing validation either in or out. Keep reading below for API details.
 
-TSDX scaffolds your new library inside `/src`, and also sets up a [Parcel-based](https://parceljs.org) playground for it inside `/example`.
+### Installation
 
-The recommended workflow is to run TSDX in one terminal:
-
-```bash
-npm start # or yarn start
+npm
+```shell script
+npm install --save @platypusrex/react-use-form
 ```
 
-This builds to `/dist` and runs the project in watch mode so any edits you save inside `src` causes a rebuild to `/dist`.
-
-Then run the example inside another:
-
-```bash
-cd example
-npm i # or yarn to install dependencies
-npm start # or yarn start
+or yarn
+```shell script
+yarn add @platypusrex/react-use-form
 ```
 
-The default example imports and live reloads whatever is in `/dist`, so if you are seeing an out of date component, make sure TSDX is running in watch mode like we recommend above. **No symlinking required**, [we use Parcel's aliasing](https://github.com/palmerhq/tsdx/pull/88/files).
+### Usage
 
-To do a one-off build, use `npm run build` or `yarn build`.
+Below is a simple usage example that also showcases most of the hooks API. This also provides an example of how
+to create a validation schema using Yup and infer a static type for the form from that schema. For more advanced examples
+check out the [examples](https://github.com/platypusrex/react-use-form/tree/master/example) directory.
 
-To run tests, use `npm test` or `yarn test`.
+**note**: In order to properly manage input values you must set a `name` attribute on the input. That attribute value 
+should be 1:1 with the form value.
 
-## Configuration
+```tsx
+import React, { FormEvent } from 'react';
+import { useForm } from '@platypusrex/react-use-form';
+import { object, string, InferType } from 'yup';
 
-Code quality is [set up for you](https://github.com/palmerhq/tsdx/pull/45/files) with `prettier`, `husky`, and `lint-staged`. Adjust the respective fields in `package.json` accordingly.
+const validationSchema = object({
+  email: string().required().email(),
+  password: string().required('Password is required').min(10),
+});
 
-### Jest
+type FormValues = InferType<typeof validationSchema>;
 
-Jest tests are set up to run with `npm test` or `yarn test`. This runs the test watcher (Jest) in an interactive mode. By default, runs tests related to files changed since the last commit.
+export const UserForm: React.FC = () => {
+  const {
+    values,
+    errors,
+    isValid,
+    setValues,
+    setValue,
+    reset,
+    onChange,
+    onSubmit
+  } = useForm<FormValues>({
+    validationSchema,
+    initialValues: {
+      email: '',
+      password: '',
+    },
+    debounce: {
+      in: 500,
+      out: 0,
+    },
+  });
 
-#### Setup Files
+  useEffect(() => {
+    setValue('email', 'foo@bar.com')
+    setValues({ password: 'password' });
+  }, []);
 
-This is the folder structure we set up for you:
+  const handleSubmit = (formValues) => {
+    console.log('formValues', formValues);
+  };
 
-```shell
-/example
-  index.html
-  index.tsx       # test your component here in a demo app
-  package.json
-  tsconfig.json
-/src
-  index.tsx       # EDIT THIS
-/test
-  blah.test.tsx   # EDIT THIS
-.gitignore
-package.json
-README.md         # EDIT THIS
-tsconfig.json
+  const handleReset = (e: FormEvent) => {
+    e.preventDefault();
+    reset();
+  }
+
+  return (
+    <form className="form" onSubmit={onSubmit(handleSubmit)} onReset={handleReset}>
+      <div>
+        <label htmlFor="email">{label}</label>
+        <input
+          id="email"
+          type="email"
+          name="email"
+          value={value.email}
+          onChange={onChange}
+        />
+        {error && <p>{error.email}</p>}
+      </div>
+      <div>
+        <label htmlFor="password">{label}</label>
+        <input
+          id="password"
+          type="password"
+          name="password"
+          value={value.password}
+          onChange={onChange}
+        />
+        {error && <p>{error.password}</p>}
+      </div>
+      <button type="reset">Reset</button>
+      <button type="submit" disabled={!isValid}>Submit</button>
+    </form>
+  );
+};
 ```
 
-#### React Testing Library
+### Options
 
-We do not set up `react-testing-library` for you yet, we welcome contributions and documentation on this.
+The hook accepts a configuration object as input. Below is a table that represents the structure of that object.
 
-### Rollup
+| **Property** | **Type** | **Required** |
+| --- | --- | --- |
+| initialValues | object | yes |
+| validationSchema | Yup.ObjectSchema | no (recommended) |
+| debounce | number or { in: number; out: number; } |
 
-TSDX uses [Rollup v1.x](https://rollupjs.org) as a bundler and generates multiple rollup configs for various module formats and build settings. See [Optimizations](#optimizations) for details.
-
-### TypeScript
-
-`tsconfig.json` is set up to interpret `dom` and `esnext` types, as well as `react` for `jsx`. Adjust according to your needs.
-
-## Continuous Integration
-
-### Travis
-
-_to be completed_
-
-### Circle
-
-_to be completed_
-
-## Optimizations
-
-Please see the main `tsdx` [optimizations docs](https://github.com/palmerhq/tsdx#optimizations). In particular, know that you can take advantage of development-only optimizations:
-
-```js
-// ./types/index.d.ts
-declare var __DEV__: boolean;
-
-// inside your code...
-if (__DEV__) {
-  console.log('foo');
+```ts
+export interface UseFormConfig<TValues extends FormValue> {
+  initialValues: TValues;
+  validationSchema?: ValidationSchema<TValues>;
+  debounce?: DebounceValidation;
 }
 ```
 
-You can also choose to install and use [invariant](https://github.com/palmerhq/tsdx#invariant) and [warning](https://github.com/palmerhq/tsdx#warning) functions.
+`intialValues`
 
-## Module Formats
+The only required input for using the form hook. This represents the form initial state and is always required
 
-CJS, ESModules, and UMD module formats are supported.
+`validationSchema`
 
-The appropriate paths are configured in `package.json` and `dist/index.js` accordingly. Please report if any issues are found.
+A Yup schema object for validating your form. If the validation schema is not provided you are essentially opting out
+of validating your form. Handling change and form submission events will still function as intended.
 
-## Using the Playground
+`debounce`
 
-```bash
-cd example
-npm i # or yarn to install dependencies
-npm start # or yarn start
+Value(s) in milliseconds for validation debounce. The debounce property is only relevant if you have provided a `validationSchema`.
+A warning will be presenting in your development env if provided without validation. If a `number` primitive is provided, the debounce
+will occur when an error occurs and also when an error is resolved by the user's input. You can fine tune the debounce behavior by
+provided an object with `in` and `out` properties. Debouncing `in` will delay validation for the given time while `out` will debounce
+the correction.
+
+### Output
+
+The hook returns an object of the below properties to help you manage your form. 
+Below is a table that represents the structure of that object.
+
+| **Property** | **Type** |
+| --- | --- |
+| values | TValues |
+| errors | { [Key in keyof TValues]: string | undefined } |
+| isValid | boolean |
+| onChange | (e: React.ChangeEvent | { name: string; value: any }) => void; |
+| onSubmit | (cb: (values: TValues) => void) => (e: React.FormEvent) => void; |
+| reset | () => void; |
+| setValues | React.Dispatch<React.SetStateAction<TValues>>; |
+| setValue | (formValues: Partial<TValues>, shouldValidate?: boolean) => void; |
+
+```ts
+export interface UseForm<TValues extends FormValue> {
+  values: TValues;
+  errors: FormError<TValues>;
+  isValid: boolean;
+  onChange: (e: OnChangeEvent) => void;
+  onSubmit: (cb: (values: TValues) => void) => (e: FormEvent) => void;
+  reset: () => void;
+  setValues: SetFormValues<TValues>;
+  setValue: SetFormValue<TValues>;
+}
 ```
 
-The default example imports and live reloads whatever is in `/dist`, so if you are seeing an out of date component, make sure TSDX is running in watch mode like we recommend above. **No symlinking required**!
+`values`
 
-## Deploying the Playground
+An object that represents the form values.
 
-The Playground is just a simple [Parcel](https://parceljs.org) app, you can deploy it anywhere you would normally deploy that. Here are some guidelines for **manually** deploying with the Netlify CLI (`npm i -g netlify-cli`):
+`errors`
 
-```bash
-cd example # if not already in the example folder
-npm run build # builds to dist
-netlify deploy # deploy the dist folder
+An object with the same shape as `values` that represents any errors for form value properties.
+This property is not needed if no `validationSchema` is provided.
+
+`isValid`
+
+A boolean that represents the validity of your form state. If no `validationSchema` is provided
+this will always evaluate to `true`.
+
+`onChange`
+
+A function that should be used to handle form input change events. A `name` attribute is required
+and should match the corresponding form state property key. Internally the `onChange` function will
+use the `event` objects target to extract both name and value, but a custom object can also be provided
+with the following shape: `{ name: string; value: any; }`. This allows a certain amount of flexibility
+to handle change event edge cases like below.
+
+```tsx
+const formatOnlyNumbers = (value: string): string => {
+  const regex = /\D/g;
+  return value.replace(regex, '');
+};
+
+const zipChangeHandler = ({ target }: ChangeEvent<HTMLInputElement>) => onChange({
+  name: target.name,
+  value: formatOnlyNumbers(target.value),
+});
+
+<input type="text" name="zip" value={values.zip} onChange={zipChangeHandler} />
 ```
 
-Alternatively, if you already have a git repo connected, you can set up continuous deployment with Netlify:
+`onSubmit`
 
-```bash
-netlify init
-# build command: yarn build && cd example && yarn && yarn build
-# directory to deploy: example/dist
-# pick yes for netlify.toml
-```
+A function to assist with form submission events. It accepts a callback as an argument and the form state is passed
+as a parameter to that callback.
 
-## Named Exports
+`reset`
 
-Per Palmer Group guidelines, [always use named exports.](https://github.com/palmerhq/typescript#exports) Code split inside your React app instead of your React library.
+A function that resets the form to it's initial state.
 
-## Including Styles
+`setValues`
 
-There are many ways to ship styles, including with CSS-in-JS. TSDX has no opinion on this, configure how you like.
+This function can be used to programmatically set any number of form values. Accepts a partial form state object and also
+boolean (`shouldValidate`) to instruct the function on whether an initial validation of the provided values should occur. This function can be very 
+useful when setting form values from a side effect.
 
-For vanilla CSS, you can include it at the root directory and add it to the `files` section in your `package.json`, so that it can be imported separately by your users and run through their bundler's loader.
+`setValue`
 
-## Publishing to NPM
+Same functionality as `setValues` but for a single form value. Accepts `name` and `value` as arguments as well as a
+boolean (`shouldValidate`) to instruct the function on whether an initial validation of the provided values should occur.
 
-We recommend using [np](https://github.com/sindresorhus/np).
+### Contributors
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
 
-## Usage with Lerna
-
-When creating a new package with TSDX within a project set up with Lerna, you might encounter a `Cannot resolve dependency` error when trying to run the `example` project. To fix that you will need to make changes to the `package.json` file _inside the `example` directory_.
-
-The problem is that due to the nature of how dependencies are installed in Lerna projects, the aliases in the example project's `package.json` might not point to the right place, as those dependencies might have been installed in the root of your Lerna project.
-
-Change the `alias` to point to where those packages are actually installed. This depends on the directory structure of your Lerna project, so the actual path might be different from the diff below.
-
-```diff
-   "alias": {
--    "react": "../node_modules/react",
--    "react-dom": "../node_modules/react-dom"
-+    "react": "../../../node_modules/react",
-+    "react-dom": "../../../node_modules/react-dom"
-   },
-```
-
-An alternative to fixing this problem would be to remove aliases altogether and define the dependencies referenced as aliases as dev dependencies instead. [However, that might cause other problems.](https://github.com/palmerhq/tsdx/issues/64)
+## LICENSE
+MIT

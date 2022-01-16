@@ -1,6 +1,6 @@
 import 'react-app-polyfill/ie11';
 import * as React from 'react';
-import * as Yup from 'yup';
+import { InferType, object, string } from 'yup';
 import { SelectField } from './components/SelectField/SelectField';
 import { TextField } from './components/TextField/TextField';
 import { Button } from './components/Button/Button';
@@ -11,19 +11,18 @@ import './index.css';
 const pobox = /\bP(ost|ostal)?([ \.]*(O|0)(ffice)?)?([ \.]*Box)\b/i;
 const alpha = /^[^!@#$%^&*()<>:;"'{}[\]|+=?/\\_]*$/;
 
-const validationSchema = Yup.object().shape({
-  address1: Yup
-    .string()
+const validationSchema = object({
+  address1: string()
     .required()
     .test('no-po-box', 'P.O. box is not allowed', (value) => !pobox.test(value!))
     .test('no-alphanumeric', 'No alphanumeric characters allowed', value => alpha.test(value!)),
-  address2: Yup.string(),
-  city: Yup.string().required(),
-  state: Yup.string().required(),
-  zip: Yup.string().required().min(5).max(5),
-}).defined();
+  address2: string().optional(),
+  city: string().required(),
+  state: string().required(),
+  zip: string().required().min(5).max(5),
+});
 
-type FormValues = Yup.InferType<typeof validationSchema>;
+type FormValues = InferType<typeof validationSchema>;
 
 const initialValues: FormValues = {
   address1: '',
