@@ -21,7 +21,10 @@
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
-  "files": ["dist", "src"],
+  "files": [
+    "dist",
+    "src"
+  ],
   "module": "dist/react-use-form.esm.js",
   "engines": {
     "node": ">=14.17.*"
