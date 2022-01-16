@@ -5,7 +5,7 @@ import {
   FormValue,
   ValidationSchema,
 } from '../types';
-import { ValidationError } from 'yup'
+import { ValidationError } from 'yup';
 
 type ValidateFieldArgs<TValues extends FormValue> = {
   validationSchema?: ValidationSchema<TValues>;
