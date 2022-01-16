@@ -1,5 +1,4 @@
 import { FormEvent, useCallback, useMemo } from 'react';
-import { ObjectSchema } from 'yup';
 import { useValues } from './useValues';
 import { useValidation } from './useValidation';
 import { DEBOUNCE_WARNING } from '../constants';
@@ -10,21 +9,23 @@ import {
 } from '../utils';
 import {
   DebounceValidation,
+  FormError,
   FormValue,
   OnChangeEvent,
   SetFormValue,
   SetFormValues,
+  ValidationSchema,
 } from '../types';
 
 export interface UseFormConfig<TValues extends FormValue> {
   initialValues: TValues;
-  validationSchema?: ObjectSchema<TValues>;
+  validationSchema?: ValidationSchema<TValues>;
   debounce?: DebounceValidation;
 }
 
 export interface UseForm<TValues extends FormValue> {
   values: TValues;
-  errors: Partial<TValues>;
+  errors: FormError<TValues>;
   isValid: boolean;
   onChange: (e: OnChangeEvent) => void;
   onSubmit: (cb: (values: TValues) => void) => (e: FormEvent) => void;
@@ -44,6 +45,7 @@ export const useForm = <TValues extends FormValue>({
     resetValues,
     handleOnChange,
   } = useValues(initialValues);
+
   const { errors, resetErrors, handleFieldValidation } = useValidation(
     validationSchema,
     debounce
@@ -70,9 +72,13 @@ export const useForm = <TValues extends FormValue>({
   );
 
   const setValue = useCallback(
-    (name: keyof TValues, value: any, shouldValidate = !!validationSchema) =>
+    (
+      name: keyof TValues,
+      value: TValues[keyof TValues],
+      shouldValidate = !!validationSchema
+    ) =>
       handleSetFormValues({
-        values: { [name as any]: value },
+        values: { [name]: value } as Partial<TValues>,
         setValues: handleSetValues,
         validateField: handleFieldValidation,
         shouldValidate,
@@ -106,7 +112,7 @@ export const useForm = <TValues extends FormValue>({
 
   return {
     values,
-    errors,
+    errors: errors as FormError<TValues>,
     isValid,
     onChange,
     onSubmit,

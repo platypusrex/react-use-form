@@ -1,10 +1,14 @@
-import { ObjectSchema } from 'yup';
 import { debounceValidationFn } from './debounceValidationFn';
-import { DebounceState, DebounceValidation, FormValue } from '../types';
+import {
+  DebounceState,
+  DebounceValidation,
+  FormValue,
+  ValidationSchema,
+} from '../types';
 
 export const getInitialDebounceState = <TValues extends FormValue>(
   debounceTiming: DebounceValidation,
-  validationSchema?: ObjectSchema<TValues>
+  validationSchema?: ValidationSchema<TValues>
 ): DebounceState<TValues> | undefined => {
   if (!validationSchema) {
     return;
@@ -12,6 +16,7 @@ export const getInitialDebounceState = <TValues extends FormValue>(
 
   return Object.keys(debounceTiming).reduce((acc, curr) => {
     const timing = debounceTiming[curr as keyof typeof debounceTiming];
+    // @ts-ignore
     acc[curr] = Object.keys(validationSchema.describe().fields).reduce(
       (acc, curr) => {
         acc[curr] = debounceValidationFn(timing);

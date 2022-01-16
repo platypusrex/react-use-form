@@ -5,6 +5,8 @@ export type FormValue = {
   [key: string]: any;
 };
 
+export type FormError<TValues> = { [Key in keyof TValues]: string | undefined };
+
 export interface NameAndValue {
   name: string;
   value: any;
@@ -14,10 +16,12 @@ export type InputChangeEvent = ChangeEvent<any>;
 
 export type OnChangeEvent = InputChangeEvent | NameAndValue;
 
+export type ValidationSchema<TSchema> = ObjectSchema<TSchema>;
+
 export type HandleValidateField<TValues extends FormValue> = (
   name: string,
   value: any,
-  validationSchema?: ObjectSchema<TValues>
+  validationSchema?: ValidationSchema<TValues>
 ) => void;
 
 export type SetValues<TValues extends FormValue> = Dispatch<
@@ -31,7 +35,7 @@ export type SetFormValues<TValues extends FormValue> = (
 
 export type SetFormValue<TValues extends FormValue> = (
   name: keyof TValues,
-  value: any,
+  value: TValues[keyof TValues],
   shouldValidate?: boolean
 ) => void;
 

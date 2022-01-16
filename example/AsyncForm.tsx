@@ -1,9 +1,9 @@
 import 'react-app-polyfill/ie11';
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
+import { object, string } from 'yup';
 import { TextField } from './components/TextField/TextField';
 import { Button } from './components/Button/Button';
-import * as Yup from 'yup';
 import { useForm } from '../.';
 import './index.css';
 
@@ -14,21 +14,19 @@ interface User {
 }
 
 const validationSchema = (user: User | null) =>
-  Yup.object()
-    .shape({
-      username: Yup.string()
-        .required()
-        .min(4),
-      email: Yup.string()
-        .required()
-        .email(),
-      ...(user?.password && {
-        password: Yup.string()
-          .required('Password is required')
-          .min(10),
-      }),
-    })
-    .defined();
+  object({
+    username: string()
+      .required()
+      .min(4),
+    email: string()
+      .required()
+      .email(),
+    ...(user?.password && {
+      password: string()
+        .required('Password is required')
+        .min(10),
+    }),
+  });
 
 const getUserAsync = (): Promise<User> => {
   return new Promise(res => {

@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ObjectSchema } from 'yup';
 import {
   DebounceState,
   DebounceValidation,
   DebounceValidationObj,
+  FormError,
   FormValue,
+  ValidationSchema,
 } from '../types';
 import {
   getDebounceTimers,
@@ -13,14 +14,14 @@ import {
   validateField,
 } from '../utils';
 
-export interface UseValidation<TValues> {
-  errors: Partial<TValues>;
+export interface UseValidation<TValues extends FormValue> {
+  errors: FormError<TValues>;
   handleFieldValidation: (name: string, value: any) => void;
   resetErrors: () => void;
 }
 
 export const useValidation = <TValues extends FormValue>(
-  validationSchema?: ObjectSchema<TValues>,
+  validationSchema?: ValidationSchema<TValues>,
   debounce?: DebounceValidation
 ): UseValidation<TValues> => {
   const schemaRef = useRef(validationSchema);
@@ -35,7 +36,7 @@ export const useValidation = <TValues extends FormValue>(
     validationSchema
   );
 
-  const [errors, setErrors] = useState<Partial<TValues>>(
+  const [errors, setErrors] = useState<FormError<TValues>>(
     initialValidationState
   );
 
@@ -44,6 +45,8 @@ export const useValidation = <TValues extends FormValue>(
   );
 
   useEffect(() => {
+    // diff validationSchema against schema stored in ref
+    // if the schema has changed since initial render, reset debouncers and update validationSchema
     const fields = validationSchema ? Object.keys(validationSchema.fields) : [];
     const fieldsRef = schemaRef.current
       ? Object.keys(schemaRef.current.fields)

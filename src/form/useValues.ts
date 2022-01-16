@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { FormValue, SetValues } from '../types';
 
-export interface UseValues<TValues> {
+export interface UseValues<TValues extends FormValue> {
   values: TValues;
   setValues: SetValues<TValues>;
   handleOnChange: (name: string, value: any) => void;
