@@ -11,7 +11,7 @@ import './index.css';
 const pobox = /\bP(ost|ostal)?([ \.]*(O|0)(ffice)?)?([ \.]*Box)\b/i;
 const alpha = /^[^!@#$%^&*()<>:;"'{}[\]|+=?/\\_]*$/;
 
-const validationSchema = object({
+const schema = object({
   address1: string()
     .required()
     .test('no-po-box', 'P.O. box is not allowed', (value) => !pobox.test(value!))
@@ -22,7 +22,7 @@ const validationSchema = object({
   zip: string().required().min(5).max(5),
 });
 
-type FormValues = InferType<typeof validationSchema>;
+type FormValues = InferType<typeof schema>;
 
 const initialValues: FormValues = {
   address1: '',
@@ -43,10 +43,9 @@ export const AddressForm: React.FC = () => {
     onSubmit
   } = useForm<FormValues>({
     initialValues,
-    validationSchema,
-    debounce: {
-      in: 1000,
-      out: 0,
+    validation: {
+      schema,
+      debounce: { in: 1000, out: 0 },
     },
   });
 

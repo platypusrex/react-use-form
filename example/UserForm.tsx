@@ -7,13 +7,13 @@ import { Button } from './components/Button/Button';
 import { useForm } from '../.';
 import './index.css';
 
-const validationSchema = object({
+const schema = object({
   username: string().required().min(4),
   email: string().required().email(),
   password: string().required('Password is required').min(10),
 });
 
-type FormValues = InferType<typeof validationSchema>;
+type FormValues = InferType<typeof schema>;
 
 const initialValues: FormValues = {
   username: '',
@@ -33,10 +33,9 @@ export const UserForm: React.FC = () => {
     onSubmit
   } = useForm<FormValues>({
     initialValues,
-    validationSchema,
-    debounce: {
-      in: 1000,
-      out: 0,
+    validation: {
+      schema,
+      debounce: { in: 1000, out: 0 },
     },
   });
 

@@ -21,11 +21,13 @@ const validationSchema = (user: User | null) =>
     email: string()
       .required()
       .email(),
-    ...(user?.password && {
-      password: string()
-        .required('Password is required')
-        .min(10),
-    }),
+    ...(!user?.password
+      ? { password: string().min(10) }
+      : {
+          password: string()
+            .required('Password is required')
+            .min(10),
+        }),
   });
 
 const getUserAsync = (): Promise<User> => {
@@ -68,12 +70,11 @@ export const AsyncForm: React.FC = () => {
     onSubmit,
   } = useForm<User>({
     initialValues: { username: '', email: '', password: '' },
-    validationSchema: validationSchema(
-      addPassword ? { ...user, password: '1234567890' } as User : user
-    ),
-    debounce: {
-      in: 1000,
-      out: 0,
+    validation: {
+      schema: validationSchema(
+        addPassword ? ({ ...user, password: '1234567890' } as User) : user
+      ),
+      debounce: { in: 1000, out: 0 },
     },
   });
 
