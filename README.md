@@ -58,14 +58,13 @@ export const UserForm: React.FC = () => {
     onChange,
     onSubmit
   } = useForm<FormValues>({
-    validationSchema,
+    validation: {
+      schema: validationSchema,
+      debounce: { in: 500, out: 0 },
+    },
     initialValues: {
       email: '',
       password: '',
-    },
-    debounce: {
-      in: 500,
-      out: 0,
     },
   });
 
@@ -91,10 +90,10 @@ export const UserForm: React.FC = () => {
           id="email"
           type="email"
           name="email"
-          value={value.email}
+          value={values.email}
           onChange={onChange}
         />
-        {error && <p>{error.email}</p>}
+        {error && <p>{errors.email}</p>}
       </div>
       <div>
         <label htmlFor="password">{label}</label>
@@ -102,10 +101,10 @@ export const UserForm: React.FC = () => {
           id="password"
           type="password"
           name="password"
-          value={value.password}
+          value={values.password}
           onChange={onChange}
         />
-        {error && <p>{error.password}</p>}
+        {error && <p>{errors.password}</p>}
       </div>
       <button type="reset">Reset</button>
       <button type="submit" disabled={!isValid}>Submit</button>
@@ -120,15 +119,13 @@ The hook accepts a configuration object as input. Below is a table that represen
 
 | **Property** | **Type** | **Required** |
 | --- | --- | --- |
-| initialValues | object | yes |
-| validationSchema | Yup.ObjectSchema | no (recommended) |
-| debounce | number or { in: number; out: number; } |
+| initialValues | object (TValues) | yes |
+| validation | { schema: Yup.ObjectSchema<TValues>; debounce?: { in: number; out: number; }; } | no (recommended) |
 
 ```ts
 export interface UseFormConfig<TValues extends FormValue> {
   initialValues: TValues;
-  validationSchema?: ValidationSchema<TValues>;
-  debounce?: DebounceValidation;
+  validation?: Validation<TValues>;
 }
 ```
 
@@ -136,18 +133,20 @@ export interface UseFormConfig<TValues extends FormValue> {
 
 The only required input for using the form hook. This represents the form initial state and is always required
 
-`validationSchema`
+`validation`
 
-A Yup schema object for validating your form. If the validation schema is not provided you are essentially opting out
-of validating your form. Handling change and form submission events will still function as intended.
+The validation object is an optional object that is used to validate form state. If the validation schema is not provided
+you are essentially opting out of validating your form. Handling change and form submission events will still function as normal.
 
+<small>`schema`</small></br>
+If the validation object is provided, a `schema` property is required. This must be a Yup schema object.
+
+<small>`debounce`</small></br>
 `debounce`
-
-Value(s) in milliseconds for validation debounce. The debounce property is only relevant if you have provided a `validationSchema`.
-A warning will be presenting in your development env if provided without validation. If a `number` primitive is provided, the debounce
-will occur when an error occurs and also when an error is resolved by the user's input. You can fine tune the debounce behavior by
-provided an object with `in` and `out` properties. Debouncing `in` will delay validation for the given time while `out` will debounce
-the correction.
+You may optionally provide a `debounce` property as well. If provided this debounce will be applied to the validation of any form state property.
+The debounce value(s) should be expressed in milliseconds. If a `number` primitive is provided, the debounce will occur when an error
+occurs and also when an error is resolved by the user's input. You can fine tune the debounce behavior by provided an object with `in` and `out`
+properties. Debouncing `in` will delay validation  while `out` will debounce the correction.
 
 ### Output
 
