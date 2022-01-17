@@ -1,7 +1,6 @@
 import { renderHook, act, cleanup } from '@testing-library/react-hooks';
 import { eventObject, formValues, validationSchema } from './testUtils';
 import { useForm } from '../src/form/useForm';
-import { DEBOUNCE_WARNING } from '../src/constants';
 import { OnChangeEvent } from '../src/types';
 
 describe('useForm', () => {
@@ -11,7 +10,7 @@ describe('useForm', () => {
     const { result } = renderHook(() =>
       useForm({
         initialValues: formValues,
-        validationSchema,
+        validation: { schema: validationSchema },
       })
     );
 
@@ -30,17 +29,17 @@ describe('useForm', () => {
     });
   });
 
-  it('should throw a dev warning if passed debounce arg but no validationSchema', () => {
-    const spyWarn = jest.spyOn(console, 'warn');
-    renderHook(() =>
-      useForm({
-        initialValues: formValues,
-        debounce: 500,
-      })
-    );
-
-    expect(spyWarn).toHaveBeenCalledWith(DEBOUNCE_WARNING);
-  });
+  // it('should throw a dev warning if passed debounce arg but no validationSchema', () => {
+  //   const spyWarn = jest.spyOn(console, 'warn');
+  //   renderHook(() =>
+  //     useForm({
+  //       initialValues: formValues,
+  //       debounce: 500,
+  //     })
+  //   );
+  //
+  //   expect(spyWarn).toHaveBeenCalledWith(DEBOUNCE_WARNING);
+  // });
 
   it('should return isValid true if no validationSchema is provided', () => {
     const { result } = renderHook(() =>
@@ -74,7 +73,7 @@ describe('useForm', () => {
     const { result, waitForNextUpdate } = renderHook(() =>
       useForm({
         initialValues: formValues,
-        validationSchema,
+        validation: { schema: validationSchema },
       })
     );
 
@@ -119,7 +118,7 @@ describe('useForm', () => {
     const { result, waitForNextUpdate } = renderHook(() =>
       useForm({
         initialValues: formValues,
-        validationSchema,
+        validation: { schema: validationSchema },
       })
     );
 
@@ -152,7 +151,7 @@ describe('useForm', () => {
     const { result } = renderHook(() =>
       useForm({
         initialValues,
-        validationSchema,
+        validation: { schema: validationSchema },
       })
     );
 
@@ -240,7 +239,7 @@ describe('useForm', () => {
     const { result, waitForNextUpdate } = renderHook(() =>
       useForm({
         initialValues: formValues,
-        validationSchema,
+        validation: { schema: validationSchema },
       })
     );
 
@@ -278,7 +277,6 @@ describe('useForm', () => {
     const { result } = renderHook(() =>
       useForm({
         initialValues: formValues,
-        debounce: 500,
       })
     );
 

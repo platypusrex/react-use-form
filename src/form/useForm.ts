@@ -1,26 +1,23 @@
 import { FormEvent, useCallback, useMemo } from 'react';
 import { useValues } from './useValues';
 import { useValidation } from './useValidation';
-import { DEBOUNCE_WARNING } from '../constants';
 import {
   getInputNameAndValue,
   handleSetFormValues,
   useEventCallback,
 } from '../utils';
 import {
-  DebounceValidation,
   FormError,
   FormValue,
   OnChangeEvent,
   SetFormValue,
   SetFormValues,
-  ValidationSchema,
+  Validation,
 } from '../types';
 
 export interface UseFormConfig<TValues extends FormValue> {
   initialValues: TValues;
-  validationSchema?: ValidationSchema<TValues>;
-  debounce?: DebounceValidation;
+  validation?: Validation<TValues>;
 }
 
 export interface UseForm<TValues extends FormValue> {
@@ -36,8 +33,7 @@ export interface UseForm<TValues extends FormValue> {
 
 export const useForm = <TValues extends FormValue>({
   initialValues,
-  validationSchema,
-  debounce,
+  validation,
 }: UseFormConfig<TValues>): UseForm<TValues> => {
   const {
     values,
@@ -47,14 +43,10 @@ export const useForm = <TValues extends FormValue>({
   } = useValues(initialValues);
 
   const { errors, resetErrors, handleFieldValidation } = useValidation(
-    validationSchema,
-    debounce
+    validation
   );
 
-  if (__DEV__ && debounce && !validationSchema) {
-    console.warn(DEBOUNCE_WARNING);
-  }
-
+  const { schema: validationSchema } = validation ?? {};
   const isValid = useMemo(
     () => (validationSchema ? validationSchema.isValidSync(values) : true),
     [validationSchema, values]

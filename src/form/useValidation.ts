@@ -1,11 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   DebounceState,
-  DebounceValidation,
   DebounceValidationObj,
   FormError,
   FormValue,
-  ValidationSchema,
+  Validation,
 } from '../types';
 import {
   getDebounceTimers,
@@ -21,9 +20,9 @@ export interface UseValidation<TValues extends FormValue> {
 }
 
 export const useValidation = <TValues extends FormValue>(
-  validationSchema?: ValidationSchema<TValues>,
-  debounce?: DebounceValidation
+  validation?: Validation<TValues>
 ): UseValidation<TValues> => {
+  const { schema: validationSchema, debounce } = validation ?? {};
   const schemaRef = useRef(validationSchema);
   const debounceTimers = useRef<DebounceValidationObj>(
     getDebounceTimers(debounce)
