@@ -142,7 +142,6 @@ you are essentially opting out of validating your form. Handling change and form
 If the validation object is provided, a `schema` property is required. This must be a Yup schema object.
 
 <small>`debounce`</small></br>
-`debounce`
 You may optionally provide a `debounce` property as well. If provided this debounce will be applied to the validation of any form state property.
 The debounce value(s) should be expressed in milliseconds. If a `number` primitive is provided, the debounce will occur when an error
 occurs and also when an error is resolved by the user's input. You can fine tune the debounce behavior by provided an object with `in` and `out`
