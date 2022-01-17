@@ -120,7 +120,7 @@ The hook accepts a configuration object as input. Below is a table that represen
 | **Property** | **Type** | **Required** |
 | --- | --- | --- |
 | initialValues | object (TValues) | yes |
-| validation | { schema: Yup.ObjectSchema<TValues>; debounce?: { in: number; out: number; }; } | no (recommended) |
+| validation | { schema: Yup.ObjectSchema<TValues>; debounce?: { in: number; out: number; } } | no (recommended) |
 
 ```ts
 export interface UseFormConfig<TValues extends FormValue> {
