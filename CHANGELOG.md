@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.6.0](https://github.com/platypusrex/react-hook-form/compare/v0.5.0...v0.6.0) (2022-01-17)
+
+
+### Bug Fixes
+
+* example form hook use after hooks options were refactored ([434a98c](https://github.com/platypusrex/react-hook-form/commit/434a98c9c62090cf762484c55806c68a6d5d5789))
+* move yup to dependency (not peer) and update readme ([3327d75](https://github.com/platypusrex/react-hook-form/commit/3327d75226cb9a4d1b2f7b01c6acdf9c719fc669))
+* unit tests errors after hook option API change ([8a1b0d4](https://github.com/platypusrex/react-hook-form/commit/8a1b0d4789f1e0ec74e0b174bbcc25a17653e5c7))
+
 ## 0.5.0 (2022-01-16)
 
 
