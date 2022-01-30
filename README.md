@@ -2,6 +2,8 @@
 
 [![npm Package](https://img.shields.io/npm/v/@platypusrex/react-use-form.svg)](https://www.npmjs.org/package/@platypusrex/react-use-form)
 [![License](https://img.shields.io/npm/l/@platypusrex/react-use-form.svg)](https://github.com/platypusrex/react-use-form/blob/master/LICENSE)
+[![Coverage Status](https://coveralls.io/repos/github/platypusrex/react-use-form/badge.svg?branch=master)](https://coveralls.io/github/platypusrex/react-use-form?branch=master)
+![CI](https://github.com/platypusrex/react-use-form/workflows/CI/badge.svg)
 
 [comment]: <> ([![Coverage Status]&#40;https://coveralls.io/repos/github/platypusrex/next-merge-props/badge.svg?branch=chore/coveralls-github-action&#41;]&#40;https://coveralls.io/github/platypusrex/next-merge-props?branch=chore/coveralls-github-action&#41;)
 
