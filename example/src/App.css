@@ -1,0 +1,30 @@
+.container {
+  min-width: 375px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.button-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.margin-top {
+  margin-top: 20px;
+}
+
+.space-around {
+  justify-content: space-around;
+}
+
+.form {
+  width: 100%
+}
+
+.link {
+  color: royalblue;
+}

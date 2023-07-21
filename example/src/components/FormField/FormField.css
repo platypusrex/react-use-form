@@ -1,0 +1,15 @@
+.form-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.label {
+  margin-bottom: 5px;
+}
+
+.error {
+  color: crimson;
+  font-size: 14px;
+  margin: 5px 0 0;
+}

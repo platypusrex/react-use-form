@@ -10,7 +10,8 @@
   },
   "exclude": [
     "dist/dts",
-    "tests"
+    "tests",
+    "example"
   ],
   "include": ["src/**/*"]
 }
