@@ -1,6 +1,6 @@
 {
   "name": "@platypusrex/react-use-form",
-  "version": "0.6.2",
+  "version": "1.0.0",
   "author": "Frank Cooke",
   "description": "React hook to manage form state and validation with yup.js",
   "keywords": [
