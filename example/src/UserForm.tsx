@@ -1,10 +1,8 @@
-import 'react-app-polyfill/ie11';
-import * as React from 'react';
 import { useEffect } from 'react';
+import { useForm } from '@platypusrex/react-use-form';
 import { object, string, InferType } from 'yup';
 import { TextField } from './components/TextField/TextField';
 import { Button } from './components/Button/Button';
-import { useForm } from '../.';
 import './index.css';
 
 const schema = object({
@@ -43,7 +41,7 @@ export const UserForm: React.FC = () => {
     setValues({ username: 'foo', email: 'bar', password: 'password' });
   }, []);
 
-  const handleSubmit = (formValues) => {
+  const handleSubmit = (formValues: FormValues) => {
     console.log('formValues', formValues);
   };
 

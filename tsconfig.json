@@ -1,24 +1,36 @@
 {
-  "include": ["src", "types"],
   "compilerOptions": {
-    "module": "esnext",
-    "lib": ["dom", "esnext"],
+    "allowSyntheticDefaultImports": true,
+    "composite": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
     "importHelpers": true,
-    "declaration": true,
-    "sourceMap": true,
-    "rootDir": "./src",
-    "strict": true,
-    "strictFunctionTypes": false,
-    "noImplicitReturns": true,
+    "jsx": "react",
+    "lib": [
+      "dom",
+      "esnext"
+    ],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noEmit": true,
     "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "moduleResolution": "node",
-    "jsx": "react",
-    "esModuleInterop": true,
+    "preserveConstEnums": true,
+    "resolveJsonModule": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    // `tsdx build` ignores this option, but it is commonly used when type-checking separately with `tsc`
-    "noEmit": true
-  }
+    "strict": true,
+    "target": "esnext",
+    "declaration": true,
+    "declarationMap": true
+  },
+  "exclude": [
+    "dist",
+    "node_modules"
+  ],
+  "include": [
+    "src/**/*",
+    "test/**/*"
+  ]
 }

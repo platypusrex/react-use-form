@@ -1,9 +1,5 @@
-* {
-  font-family: "Verdana", sans-serif;
-}
-
 .container {
-  max-width: 375px;
+  min-width: 375px;
   margin: 0 auto;
 }
 

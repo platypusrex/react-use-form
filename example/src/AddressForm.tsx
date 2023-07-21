@@ -1,10 +1,8 @@
-import 'react-app-polyfill/ie11';
-import * as React from 'react';
+import { useForm } from '@platypusrex/react-use-form';
 import { InferType, object, string } from 'yup';
 import { SelectField } from './components/SelectField/SelectField';
 import { TextField } from './components/TextField/TextField';
 import { Button } from './components/Button/Button';
-import { useForm } from '../.';
 import { stateOptions } from './stateOptions';
 import './index.css';
 
@@ -49,7 +47,7 @@ export const AddressForm: React.FC = () => {
     },
   });
 
-  const handleSubmit = (formValues) => {
+  const handleSubmit = (formValues: FormValues) => {
     console.log('values', formValues);
   };
 

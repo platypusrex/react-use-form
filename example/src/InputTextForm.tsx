@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { TextField } from './components/TextField/TextField';
 
 export const InputTestForm: React.FC = () => {

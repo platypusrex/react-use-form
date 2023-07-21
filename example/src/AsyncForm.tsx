@@ -1,10 +1,8 @@
-import 'react-app-polyfill/ie11';
-import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
+import { useForm } from '@platypusrex/react-use-form';
 import { object, string } from 'yup';
 import { TextField } from './components/TextField/TextField';
 import { Button } from './components/Button/Button';
-import { useForm } from '../.';
 import './index.css';
 
 interface User {
@@ -85,7 +83,7 @@ export const AsyncForm: React.FC = () => {
     }
   }, [user]);
 
-  const handleSubmit = formValues => {
+  const handleSubmit = (formValues: any) => {
     console.log('formValues', formValues);
   };
 
