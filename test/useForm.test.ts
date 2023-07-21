@@ -1,7 +1,7 @@
-import { renderHook, act, cleanup } from '@testing-library/react-hooks';
-import { eventObject, formValues, validationSchema } from './testUtils';
+import { renderHook, act, cleanup, waitFor } from '@testing-library/react';
 import { useForm } from '../src/form/useForm';
 import { OnChangeEvent } from '../src/types';
+import { eventObject, formValues, validationSchema } from './testUtils';
 
 describe('useForm', () => {
   afterEach(cleanup);
@@ -28,18 +28,6 @@ describe('useForm', () => {
       setValue: expect.any(Function),
     });
   });
-
-  // it('should throw a dev warning if passed debounce arg but no validationSchema', () => {
-  //   const spyWarn = jest.spyOn(console, 'warn');
-  //   renderHook(() =>
-  //     useForm({
-  //       initialValues: formValues,
-  //       debounce: 500,
-  //     })
-  //   );
-  //
-  //   expect(spyWarn).toHaveBeenCalledWith(DEBOUNCE_WARNING);
-  // });
 
   it('should return isValid true if no validationSchema is provided', () => {
     const { result } = renderHook(() =>
@@ -70,7 +58,7 @@ describe('useForm', () => {
 
   it('should update and validate form values via setValues', async () => {
     const updatedFormValues = { firstName: 'bar', lastName: undefined };
-    const { result, waitForNextUpdate } = renderHook(() =>
+    const { result } = renderHook(() =>
       useForm({
         initialValues: formValues,
         validation: { schema: validationSchema },
@@ -81,14 +69,13 @@ describe('useForm', () => {
       result.current.setValues(updatedFormValues);
     });
 
+    await waitFor(() => {
+      expect(result.current.errors.lastName).toEqual(
+        'lastName is a required field'
+      );
+    });
     expect(result.current.values).toEqual(updatedFormValues);
-
-    await waitForNextUpdate();
-
     expect(result.current.isValid).toBe(false);
-    expect(result.current.errors.lastName).toEqual(
-      'lastName is a required field'
-    );
   });
 
   it('should update a single form value via setValue', () => {
@@ -115,7 +102,7 @@ describe('useForm', () => {
   it('should update and validate a single form value via setValue', async () => {
     const name = 'lastName';
     const value = undefined;
-    const { result, waitForNextUpdate } = renderHook(() =>
+    const { result } = renderHook(() =>
       useForm({
         initialValues: formValues,
         validation: { schema: validationSchema },
@@ -131,12 +118,12 @@ describe('useForm', () => {
       lastName: undefined,
     });
 
-    await waitForNextUpdate();
-
+    await waitFor(() => {
+      expect(result.current.errors.lastName).toEqual(
+        'lastName is a required field'
+      );
+    });
     expect(result.current.isValid).toBe(false);
-    expect(result.current.errors.lastName).toEqual(
-      'lastName is a required field'
-    );
   });
 
   it('should reset the form', async () => {
@@ -236,7 +223,7 @@ describe('useForm', () => {
   });
 
   it('should update and validate a form value via onChange handler', async () => {
-    const { result, waitForNextUpdate } = renderHook(() =>
+    const { result } = renderHook(() =>
       useForm({
         initialValues: formValues,
         validation: { schema: validationSchema },
@@ -260,11 +247,11 @@ describe('useForm', () => {
       lastName: changeEvt.target.value,
     });
 
-    await waitForNextUpdate();
-
-    expect(result.current.errors).toEqual({
-      firstName: undefined,
-      lastName: 'lastName is a required field',
+    await waitFor(() => {
+      expect(result.current.errors).toEqual({
+        firstName: undefined,
+        lastName: 'lastName is a required field',
+      });
     });
     expect(result.current.isValid).toBe(false);
   });

@@ -97,6 +97,9 @@ devDependencies:
   rimraf:
     specifier: ^5.0.1
     version: 5.0.1
+  tslib:
+    specifier: ^2.6.0
+    version: 2.6.0
   typescript:
     specifier: ^4.9.5
     version: 4.9.5

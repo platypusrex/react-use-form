@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, ChangeEvent } from 'react';
-import { ObjectSchema } from 'yup';
+import { AnyObject, Maybe, ObjectSchema } from 'yup';
 
 export type FormValue = {
   [key: string]: any;
@@ -61,7 +61,7 @@ export interface DebounceValidationObj {
 
 export type DebounceValidation = number | DebounceValidationObj;
 
-export type ValidationSchema<TSchema> = ObjectSchema<TSchema>;
+export type ValidationSchema<TSchema extends Maybe<AnyObject>> = ObjectSchema<TSchema>;
 
 export interface Validation<TValues extends FormValue> {
   schema: ValidationSchema<TValues>;
