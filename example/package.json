@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@platypusrex/react-use-form": "file:../platypusrex-react-use-form-0.6.2.tgz",
+    "@platypusrex/react-use-form": "latest",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
