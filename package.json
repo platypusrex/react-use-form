@@ -29,6 +29,9 @@
   "engines": {
     "node": ">=14.17.*"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "yarn clean && concurrently \"yarn build:cjs\" \"yarn build:esm\" \"yarn build:ts\"",
     "build:cjs": "swc src -d dist/cjs --config-file .swcrc -C module.type=commonjs",
