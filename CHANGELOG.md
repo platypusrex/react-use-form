@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.2
+
+### Patch Changes
+
+- c40bbca: First attempt to fix missing dist dir was a fail. This should patch any critical and missing elements.
+
 ## 1.0.1
 
 ### Patch Changes
