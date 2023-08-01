@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.1
+
+### Patch Changes
+
+- b24b3f2: Due to a bad file configuration in the project package.json, the dist dir is currently missing in the published module. This is the attempt to resolve the issue.
+
 ## 1.0.0
 
 ### Major Changes
