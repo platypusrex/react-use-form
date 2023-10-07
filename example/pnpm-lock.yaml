@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@platypusrex/react-use-form':
-    specifier: file:../platypusrex-react-use-form-0.6.2.tgz
-    version: file:../platypusrex-react-use-form-0.6.2.tgz(react@18.2.0)
+    specifier: latest
+    version: 1.0.2(react@18.2.0)
   react:
     specifier: ^18.2.0
     version: 18.2.0
@@ -589,6 +589,17 @@ packages:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.15.0
     dev: true
+
+  /@platypusrex/react-use-form@1.0.2(react@18.2.0):
+    resolution: {integrity: sha512-7lrVjWbGLOKfFVUIDx2KXpIgEBpEwm09mOfCb7sP1df0cuNE9bh7RdauEnZzoXUvLL1xsBGzJudMADO2VMhhIQ==}
+    engines: {node: '>=14.17.*'}
+    peerDependencies:
+      react: '>=16.8.0'
+    dependencies:
+      lodash.debounce: 4.0.8
+      react: 18.2.0
+      yup: 1.2.0
+    dev: false
 
   /@types/json-schema@7.0.12:
     resolution: {integrity: sha512-Hr5Jfhc9eYOQNPYO5WLDq/n4jqijdHNlDXjuAQkkt+mWdQR+XJToOHrsD4cPaMXpn6KO7y2+wM8AZEs8VpBLVA==}
@@ -1502,8 +1513,8 @@ packages:
     engines: {node: '>=8.6'}
     dev: true
 
-  /postcss@8.4.27:
-    resolution: {integrity: sha512-gY/ACJtJPSmUFPDCHtX78+01fHa64FaU4zaaWfuh1MhGJISufJAH4cun6k/8fwsHYeK4UQmENQK+tRLCFJE8JQ==}
+  /postcss@8.4.31:
+    resolution: {integrity: sha512-PS08Iboia9mts/2ygV3eLpY5ghnUcfLV/EXTOW1E2qYxJKGGBUtNjN76FYHnMs36RmARn41bC0AZmn+rR0OVpQ==}
     engines: {node: ^10 || ^12 || >=14}
     dependencies:
       nanoid: 3.3.6
@@ -1751,7 +1762,7 @@ packages:
         optional: true
     dependencies:
       esbuild: 0.18.15
-      postcss: 8.4.27
+      postcss: 8.4.31
       rollup: 3.26.3
     optionalDependencies:
       fsevents: 2.3.2
@@ -1789,18 +1800,4 @@ packages:
       tiny-case: 1.0.3
       toposort: 2.0.2
       type-fest: 2.19.0
-    dev: false
-
-  file:../platypusrex-react-use-form-0.6.2.tgz(react@18.2.0):
-    resolution: {integrity: sha512-XcZ1528YwSiI+OK8vHtXe/fS5cmIlMSfs6Hpn1KFgo8ajpBH+3j4IpHBccypx3MzmOmX3WAtG8R0Dffot1xnvQ==, tarball: file:../platypusrex-react-use-form-0.6.2.tgz}
-    id: file:../platypusrex-react-use-form-0.6.2.tgz
-    name: '@platypusrex/react-use-form'
-    version: 0.6.2
-    engines: {node: '>=14.17.*'}
-    peerDependencies:
-      react: '>=16.8.0'
-    dependencies:
-      lodash.debounce: 4.0.8
-      react: 18.2.0
-      yup: 1.2.0
     dev: false
