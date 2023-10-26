@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.3
+
+### Patch Changes
+
+- d89b179: Patches security vulnerabilites.
+
 ## 1.0.2
 
 ### Patch Changes
